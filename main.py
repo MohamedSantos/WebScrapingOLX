@@ -10,23 +10,27 @@ from datetime import date
 
 listJson = []
 
-def search_data(pages=10, regiao='SP', marca='gm', modelo='meriva'):
+
+def search_data(pages=10, regiao='SP', marca='gm', modelo='/meriva', ano='2006', preco='13000'):
     region_search = {'SP': 'sao-paulo-e-regiao'}
     prefix = {'SP': 'sp'}
     maker_search = {'': '', 'citroen': '/citroen', 'fiat': '/fiat', 'ford': '/ford', 'gm': '/gm-chevrolet',
-                   'honda': '/honda', 'hyundai': '/hyundai'}
-    model_search = {'': '', 'meriva': '/meriva'}
+                    'honda': '/honda', 'hyundai': '/hyundai', 'renault': '/renault', 'toyota': '/toyota',
+                    'vw': '/vw-volkswagen', 'audi': '/audi', 'bmw': '/bmw', 'mercedes': '/mercedes-benz'}
+    year_search = {'1999': '17', '2000': '18', '2001': '19', '2002': '20', '2003': '21', '2004': '22',
+                   '2005': '23', '2006': '24', '2007': '25', '2008': '26', '2009': '27', '2010': '28'}
     for x in range(0, pages):
         print('LOOP NUMBER: ' + str(x))
         url = 'https://' + prefix[regiao] + '.olx.com.br/' + region_search[
-            regiao] + '/autos-e-pecas/carros-vans-e-utilitarios' + maker_search[marca] + model_search[modelo] +\
-              '?cf=1&pe=13000&ps=1000&rs=22'
+            regiao] + '/autos-e-pecas/carros-vans-e-utilitarios' + maker_search[marca] + modelo + \
+              '?cf=1&pe='+preco+'&ps=1000&rs=22'
         if x == 0 or x == 1:
             print('somente a primeira página')
         else:
             url = 'https://' + prefix[regiao] + '.olx.com.br/' + region_search[
                 regiao] + '/autos-e-pecas/carros-vans-e-utilitarios' + \
-                  maker_search[marca] + model_search[modelo] + '?cf=1&o=' + str(x) + '&pe=13000&ps=1000&rs=22'
+                  maker_search[marca] + modelo + '?cf=1&o=' + str(x) + '&pe='+preco+'&ps=1000&rs='\
+                  + year_search[ano]
 
         PARAMS = {
             "authority": "sp.olx.com.br",
@@ -57,7 +61,7 @@ def search_data(pages=10, regiao='SP', marca='gm', modelo='meriva'):
                 options = options.strip()
                 region = a.findAll('span', class_='sc-7l84qu-1 ciykCV sc-ifAKCX dpURtf')[0].contents[0]
 
-                #print(f'Nome: {name} \n Preço: {price} \n Dia e hora: {day_post}-{hour_post} \n URL: {url_post} \n Adicionais: {options} \n Região: {region}')
+                # print(f'Nome: {name} \n Preço: {price} \n Dia e hora: {day_post}-{hour_post} \n URL: {url_post} \n Adicionais: {options} \n Região: {region}')
                 json = {'dia_postagem': day_post,
                         'hora_postagem': hour_post,
                         'nome': name,
@@ -69,6 +73,7 @@ def search_data(pages=10, regiao='SP', marca='gm', modelo='meriva'):
                 listJson.append(json)
             except:
                 print('anuncio')
+
 
 search_data()
 df = pd.DataFrame(listJson)
