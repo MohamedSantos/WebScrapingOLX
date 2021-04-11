@@ -71,5 +71,6 @@ def search_data(pages=10, regiao='SP', marca='gm', modelo='meriva'):
                 print('anuncio')
 
 search_data()
-'''df = pd.DataFrame(listJson)
-df.to_excel('veiculos.xlsx')'''
+df = pd.DataFrame(listJson)
+df.drop_duplicates(subset=['nome', 'preco', 'url'], inplace=True, keep='first')
+df.to_excel('veiculos_meriva.xlsx')
